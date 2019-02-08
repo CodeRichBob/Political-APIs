@@ -49,3 +49,27 @@ def get_single_party(party_id):
         "status": 404,
         "error": "Party not found"
 }), 404)
+
+@bash.route("/parties",methods=['PATCH'])
+def edit_party():
+    data = request.get_json()
+    try:
+        type = data['type']
+        name = data['name']
+        id = data['id']
+    except:
+        return make_response(jsonify({
+            "status": 400,
+            "error": "Not all fields are provided, must have id, name and type"
+        }), 400)
+    newparty = PartiesModel(name, type,id)
+    newparty.saveparty()
+
+    return make_response(jsonify({
+        "status": 201,
+        "data": [{
+            "type": type,
+            "name": name,
+            "id": id
+        }]
+    }), 201)
