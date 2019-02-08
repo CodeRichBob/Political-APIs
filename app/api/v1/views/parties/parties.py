@@ -2,6 +2,29 @@ from flask import jsonify, make_response,request, Blueprint
 from app.api.v1.views import bash
 from app.api.v1.models.models import PartiesModel
 
+@bash.route("/parties", methods=["POST"])
+def postparty():
+    data = request.get_json()
+    try:
+        type = data['type']
+        name = data['name']
+        id = data['id']
+    except:
+        return make_response(jsonify({
+            "status": 400,
+            "error": "Not all fields are provided, must have id, name and type"
+        }), 400)
+    newparty = PartiesModel(name, type,id)
+    newparty.saveparty()
+
+    return make_response(jsonify({
+        "status": 201,
+        "data": [{
+            "type": type,
+            "name": name,
+            "id": id
+        }]
+    }), 201)
 
 
 
