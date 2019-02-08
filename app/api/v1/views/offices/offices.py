@@ -12,7 +12,31 @@ def getoffices():
         "status": 200,
         "data": OfficesModel.view_all_offices()
     }), 200)
-       
+
+@views.route("/offices", methods=["POST"])
+def postoffice():
+    data = request.get_json()
+    try:
+        type = data['type']
+        name = data['name']
+        id = data['id']
+    except:
+        return make_response(jsonify({
+            "status": 400,
+            "error": "Not all fields are provided, must have id, name and type"
+        }), 400)
+    newoffice = OfficesModel(name, type,id)
+    newoffice.saveoffice()
+
+    return make_response(jsonify({
+        "status": 201,
+        "data": [{
+            "type": type,
+            "name": name,
+            "id": id
+        }]
+    }), 201)
+
 
 
 @views.route("/offices/<int:office_id>")
