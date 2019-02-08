@@ -5,6 +5,13 @@ from app.api.v1.models.models import OfficesModel
 @views.route("/getoffice")
 def getoffice():
     return "jjustanoffice"
+    
+@views.route("/offices", methods=["GET"])
+def getoffices():
+    return make_response(jsonify({
+        "status": 200,
+        "data": OfficesModel.view_all_offices()
+    }), 200)
        
 
 
